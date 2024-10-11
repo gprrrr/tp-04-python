@@ -7,14 +7,14 @@ app = Flask(__name__)
 
 
 def get_bike_data():
-    api_url = "https://opendata.lillemetropole.fr/api/explore/v2.1/catalog/datasets/vlille-realtime/records"
+    api_url = "https://data.lillemetropole.fr/geoserver/wfs?SERVICE=WFS&REQUEST=GetFeature&VERSION=2.0.0&TYPENAMES=dsp_ilevia%3Avlille_temps_reel&OUTPUTFORMAT=application%2Fjson"
     params = {
             "limit": "100",
         }
     response = requests.get(api_url, params=params)
-    data = response.json()["results"]
+    data = response.json()["features"]
 
-    filtered_data = [repo for repo in data if repo['etatconnexion'] == 'CONNECTÉ']
+    filtered_data = [repo for repo in data if repo['properties']['etat_connexion'] == 'CONNECTÉ']
 
     return filtered_data
 
@@ -31,9 +31,10 @@ def index():
     my_map = folium.Map(location=map_center, zoom_start=14)
 
     for record in bike_data:
-        bike_count = record["nbvelosdispo"]
-        place_count = record["nbplacesdispo"]
-        station_location = [record["localisation"]["lat"], record["localisation"]["lon"]]
+        record = record["properties"]
+        bike_count = record["nb_velos_dispo"]
+        place_count = record["nb_places_dispo"]
+        station_location = [record["y"], record["x"]]
 
         marker_text = f"<b>Bikes:</b> {bike_count} <br> <b>Places:</b> {place_count}"
         folium.Marker(location=station_location, popup=marker_text).add_to(my_map)
