@@ -2,35 +2,45 @@ import unittest
 from unittest.mock import patch
 from main import get_bike_data
 
+
 class TestFlaskApp(unittest.TestCase):
     def test_get_bike_data(self):
         mock_data = {
             "total_count": 2,
-            "results": [
+            "features": [
                 {
-                    "libelle": 136,
-                    "etatconnexion": "CONNECTÉ",
-                    "nom": "RUE CHAMBORD",
-                    "geo": {"lon": 3.133873, "lat": 50.62972},
-                    "nbplacesdispo": 0,
-                    "nbvelosdispo": 0,
+                    "properties": {
+                        "libelle": 136,
+                        "etat_connexion": "CONNECTÉ",
+                        "nom": "RUE CHAMBORD",
+                        "y": 3.133873,
+                        "x": 50.62972,
+                        "nb_places_dispo": 0,
+                        "nb_velos_dispo": 0,
+                    },
                 },
                 {
-                    "libelle": 270,
-                    "etatconnexion": "CONNECTÉ",
-                    "nom": "PAVÉ DE LILLE",
-                    "geo": {"lon": 3.130098, "lat": 50.664211},
-                    "nbplacesdispo": 18,
-                    "nbvelosdispo": 2,
+                    "properties": {
+                        "libelle": 136,
+                        "etat_connexion": "CONNECTÉ",
+                        "nom": "PAVÉ DE LILLE",
+                        "y": 3.133873,
+                        "x": 50.62972,
+                        "nb_places_dispo": 10,
+                        "nb_velos_dispo": 10,
+                    },
                 },
                 {
-                   "libelle": 275,
-                   "etatconnexion": "DÉCONNECTÉ",
-                   "nom": "Rue VOLTAIRE",
-                   "geo": {"lon": 3.130098, "lat": 50.664211},
-                   "nbplacesdispo": 0,
-                   "nbvelosdispo": 0,
-                },
+                    "properties": {
+                        "libelle": 136,
+                        "etat_connexion": "DECONNECTÉ",
+                        "nom": "RUE TOTO",
+                        "y": 3.456783,
+                        "x": 50.66782,
+                        "nb_places_dispo": 0,
+                        "nb_velos_dispo": 0,
+                    }
+                }
             ],
         }
 
@@ -39,8 +49,9 @@ class TestFlaskApp(unittest.TestCase):
             result = get_bike_data()
 
         self.assertEqual(len(result), 2)
-        self.assertEqual(result[0]["nom"], "RUE CHAMBORD")
-        self.assertEqual(result[1]["nom"], "PAVÉ DE LILLE")
+        self.assertEqual(result[0]["properties"]["nom"], "RUE CHAMBORD")
+        self.assertEqual(result[1]["properties"]["nom"], "PAVÉ DE LILLE")
+
 
 if __name__ == "__main__":
     unittest.main()
